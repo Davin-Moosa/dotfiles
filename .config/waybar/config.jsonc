@@ -1,0 +1,108 @@
+// -*- mode: jsonc -*-
+{
+  // "layer": "top", // Waybar at top layer
+  // "position": "bottom", // Waybar position (top|bottom|left|right)
+  "height": 30, // Waybar height (to be removed for auto height)
+  // "width": 1280, // Waybar width
+  // "spacing": 4, // Gaps between modules (4px)
+  // Choose the order of the modules
+  "modules-left": [
+    "niri/workspaces",
+    "mpris"
+  ],
+  "modules-center": [
+    "niri/window"
+  ],
+  "modules-right": [
+    "idle_inhibitor",
+    "pulseaudio",
+    "power-profiles-daemon",
+    "backlight",
+    "battery",
+    "clock",
+    "tray",
+    "custom/power"
+  ],
+  // Modules configuration
+  "mpris": {
+    "format": "{player_icon} {dynamic}",
+    "format-paused": "{status_icon} <i>{dynamic}</i>",
+    "player-icons": {
+      "default": "󰐊",
+      "mpv": "🎵"
+    },
+    "status-icons": {
+      "paused": "󰏤"
+    }
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "󰅶",
+      "deactivated": "󰾪"
+    }
+  },
+  "pulseaudio": {
+      "format": "{volume}% {icon} {format_source}",
+      "format-bluetooth": "{volume}% {icon}󰂯 {format_source}",
+      "format-bluetooth-muted": "󰝟 {icon}󰂯 {format_source}",
+      "format-muted": "󰝟 {format_source}",
+      "format-source": "{volume}% 󰍬",
+      "format-source-muted": "󰍭 ",
+      "format-icons": {
+        "headphone": "󰋋",
+        "hands-free": "󱡏",
+        "headset": "󰋎",
+        "phone": "󰏲",
+        "portable": "󰏲",
+        "car": "󰄋",
+        "default": ["󰕿", "󰖀", "󰕾"]
+      },
+      "on-click": "pavucontrol"
+  },
+  "backlight": {
+      "format": "{percent}% {icon}",
+      "format-icons": ["󰛩", "󱩎", "󱩏", "󱩐", "󱩑", "󱩒", "󱩓", "󱩔", "󱩕", "󱩖", "󰛨"]
+  },
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "󰾅",
+      "performance": "󰓅",
+      "balanced": "󰾅",
+      "power-saver": "󰾆"
+    }
+  },
+  "battery": {
+    "states": {
+      "critical": 15
+    },
+    "format": "{capacity}% {icon}",
+    "format-full": "{capacity}% {icon}",
+    "format-charging": "{capacity}% 󰂄",
+    "format-plugged": "{capacity}% 󰚥",
+    "format-alt": "{time} {icon}",
+    "format-icons": ["󰂎","󰁺","󰁻","󰁼","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"]
+  },
+  "clock": {
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format-alt": "{:%Y-%m-%d}"
+  },
+  "tray": {
+    "spacing": 10
+  },
+  "custom/power": {
+    "format" : "󰐥",
+    "tooltip": false,
+    "menu": "on-click",
+    "menu-file": "$HOME/.config/waybar/power_menu.xml",
+    "menu-actions": {
+      "poweroff": "systemctl poweroff",
+      "reboot": "systemctl reboot",
+      "suspend": "systemctl suspend",
+      "hibernate": "systemctl hibernate"
+    }
+  }
+}
