@@ -67,7 +67,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 
 -- completion
-vim.o.completeopt = 'menuone,noselect,popup'
+vim.o.completeopt = 'menuone,noselect'
 
 -- cursor line
 vim.o.cursorline = true
@@ -492,7 +492,7 @@ end)
 args_load(function()
   gh('neovim/nvim-lspconfig')
 
-  vim.lsp.enable({ 'lua_ls', 'pyrefly' })
+  vim.lsp.enable({ 'lua_ls', 'jedi_language_server' })
   autocmd('LspAttach', {
     desc = 'Enable LSP',
     group = augroup('lsp'),
