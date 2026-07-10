@@ -10,10 +10,11 @@ cd .. && rm -rf cachyos-repo*
 
 # install packages
 pkgs=(
-  anki
-  base-devel
+  # check for bin versions
+  anki-bin
   bat
   blueman
+  brave
   brightnessctl
   btop
   chafa
@@ -21,29 +22,25 @@ pkgs=(
   fd
   fish
   fzf
-  ghostty-nautilus
+  ghostty
   git
   gnome-keyring
-  helium-browser-bin
   keyd
-  lib32-vulkan-radeon
-  libreoffice-fresh
+  libreoffice-bin
   linux-cachyos
-  man-{db,pages}
-  neovim-nightly-bin
-  paru
+  neovim-nightly
   pavucontrol
-  polkit-gnome
-  proton-vpn-gtk-app
+  polkit_gnome
+  proton-vpn
   qt6ct
   ripgrep
   steam
   tealdeer
-  texinfo
-  tlp{,-pd,-rdw}
-  tree-sitter-cli
-  ttf-{fira-code,nerd-fonts-symbols}
-  unzip
+  tlp
+  tlp-pd
+  tlp-rdw
+  fira-code
+  nerd-fonts.symbols-only
   uv
   wl-clipboard
   wlsunset
