@@ -485,14 +485,9 @@ now(function()
 end)
 
 args_load(function()
-  gh('mason-org/mason.nvim')
-  require('mason').setup()
-end)
-
-args_load(function()
   gh('neovim/nvim-lspconfig')
 
-  vim.lsp.enable({ 'lua_ls', 'jedi_language_server' })
+  vim.lsp.enable({ 'jedi_language_server', 'ruff' })
   autocmd('LspAttach', {
     desc = 'Enable LSP',
     group = augroup('lsp'),
@@ -508,65 +503,5 @@ args_load(function()
         vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
       end
     end,
-  })
-end)
-
-args_load(function()
-  autocmd('PackChanged', {
-    desc = 'Update Nvim Treesitter',
-    group = augroup('nvim-treesitter'),
-    callback = function(ev)
-      if ev.data.spec.name == 'nvim-treesitter' and ev.data.kind == 'update' then
-        if not ev.data.active then
-          vim.cmd.packadd('nvim-treesitter')
-        end
-        vim.cmd.TSUpdate()
-      end
-    end,
-  })
-  gh('nvim-treesitter/nvim-treesitter')
-
-  local langs = { 'bash', 'css', 'json', 'python' }
-  require('nvim-treesitter').install(langs)
-
-  vim.cmd.packadd('nvim-treesitter')
-  local ft = {}
-  for _, lang in ipairs(langs) do
-    vim.list_extend(ft, vim.treesitter.language.get_filetypes(lang))
-  end
-
-  autocmd('FileType', {
-    desc = 'Enable Nvim Treesitter',
-    group = augroup('nvim-treesitter'),
-    pattern = ft,
-    callback = function()
-      -- syntax
-      vim.treesitter.start()
-
-      -- folds
-      vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-      vim.wo.foldmethod = 'expr'
-      vim.wo.foldlevel = 99
-
-      -- indents
-      vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-    end,
-  })
-end)
-
-later(function()
-  gh('nvim-lua/plenary.nvim')
-  gh('nvimtools/none-ls.nvim')
-  gh('nvimtools/none-ls-extras.nvim')
-  local null_ls = require('null-ls')
-  local formatter = null_ls.builtins.formatting
-  local linter = null_ls.builtins.diagnostics
-  null_ls.setup({
-    sources = {
-      formatter.stylua,
-      linter.selene,
-      require('none-ls.diagnostics.ruff'),
-      require('none-ls.formatting.ruff'),
-    },
   })
 end)
