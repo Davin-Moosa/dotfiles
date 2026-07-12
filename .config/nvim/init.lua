@@ -1,48 +1,4 @@
--- FUNCTIONS/VARIABLES
-
--- [ KEYMAPS ]
-
-local set = function(lhs, rhs, opts, mode)
-  mode = mode == nil and 'n' or mode
-  if type(opts) == 'string' then
-    opts = { desc = opts }
-  end
-  vim.keymap.set(mode, lhs, rhs, opts)
-end
-
-local function set_l(suffix, rhs, opts, mode)
-  set('<Leader>' .. suffix, rhs, opts, mode)
-end
-
--- [ AUTOCMDS ]
-
-local augroup = function(name)
-  vim.api.nvim_create_augroup(name, {})
-end
-local autocmd = vim.api.nvim_create_autocmd
-
--- [ PLUGINS ]
-
-local gh = function(repo)
-  vim.pack.add({ 'https://github.com/' .. repo })
-end
-
-local mini = function(mod)
-  local sep = mod == 'git' and '-' or '.'
-  gh('nvim-mini/mini' .. sep .. mod)
-end
-
-mini('misc')
-local safely = require('mini.misc').safely
-local now = function(fn)
-  safely('now', fn)
-end
-local later = function(fn)
-  safely('later', fn)
-end
-local args_load = vim.fn.argc(-1) > 0 and now or later
-
--- GLOBAL
+-- GLOBALS
 
 -- leader
 vim.g.mapleader = ' '
@@ -101,6 +57,19 @@ vim.o.winborder = 'bold'
 
 -- KEYMAPS
 
+local set = function(lhs, rhs, opts, mode)
+  mode = mode == nil and 'n' or mode
+  if type(opts) == 'string' then
+    opts = { desc = opts }
+  end
+  vim.keymap.set(mode, lhs, rhs, opts)
+end
+
+local function set_l(suffix, rhs, opts, mode)
+  set('<Leader>' .. suffix, rhs, opts, mode)
+end
+
+
 set('grD', vim.lsp.buf.declaration, 'vim.lsp.buf.declaration()')
 set('grd', vim.lsp.buf.definition, 'vim.lsp.buf.definition()')
 set('grf', vim.lsp.buf.format, 'vim.lsp.buf.format()', { 'n', 'x' })
@@ -109,6 +78,12 @@ set_l('Dl', vim.diagnostic.setloclist, 'Set diagnostics location list')
 set_l('Dq', vim.diagnostic.setqflist, 'Set diagnostics quickfix list')
 
 -- AUTOCMDS
+
+local augroup = function(name)
+  vim.api.nvim_create_augroup(name, {})
+end
+local autocmd = vim.api.nvim_create_autocmd
+
 
 autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -120,31 +95,42 @@ autocmd('TextYankPost', {
 
 -- DIAGNOSTICS
 
-later(function()
-  vim.diagnostic.config({
-    severity_sort = true,
-    virtual_text = {
-      current_line = true,
-    },
-  })
-end)
+vim.diagnostic.config({
+  severity_sort = true,
+  virtual_text = {
+    current_line = true,
+  },
+})
 
 -- PLUGINS
+
+local gh = function(repos)
+  vim.pack.add({ 'https://github.com/' .. repos })
+end
+
+gh('nvim-mini/mini.nvim')
+
+local safely = require('mini.misc').safely
+local now = function(fn)
+  safely('now', fn)
+end
+local later = function(fn)
+  safely('later', fn)
+end
+local args_load = vim.fn.argc(-1) > 0 and now or later
+
 
 -- [ MINI MODULES ]
 
 now(function()
-  mini('icons')
   require('mini.icons').setup()
 end)
 
 now(function()
-  mini('notify')
   require('mini.notify').setup()
 end)
 
 now(function()
-  mini('sessions')
   local sessions = require('mini.sessions')
   sessions.setup()
 
@@ -161,22 +147,18 @@ now(function()
 end)
 
 now(function()
-  mini('starter')
   require('mini.starter').setup()
 end)
 
 now(function()
-  mini('statusline')
   require('mini.statusline').setup()
 end)
 
 now(function()
-  mini('tabline')
   require('mini.tabline').setup()
 end)
 
 args_load(function()
-  mini('files')
   local files = require('mini.files')
   files.setup({
     mappings = {
@@ -240,7 +222,6 @@ args_load(function()
 end)
 
 args_load(function()
-  mini('misc')
   local misc = require('mini.misc')
   misc.setup()
   misc.setup_auto_root()
@@ -251,7 +232,6 @@ args_load(function()
 end)
 
 args_load(function()
-  mini('pick')
   require('mini.pick').setup()
 
   set_l('pb', '<Cmd>Pick buffers<CR>', 'Buffers')
@@ -262,12 +242,10 @@ args_load(function()
 end)
 
 later(function()
-  mini('extra')
   require('mini.extra').setup()
 end)
 
 later(function()
-  mini('ai')
   require('mini.ai').setup({
     custom_textobjects = {
       B = MiniExtra.gen_ai_spec.buffer(),
@@ -276,22 +254,18 @@ later(function()
 end)
 
 later(function()
-  mini('align')
   require('mini.align').setup()
 end)
 
 later(function()
-  mini('animate')
   require('mini.animate').setup()
 end)
 
 later(function()
-  mini('bracketed')
   require('mini.bracketed').setup()
 end)
 
 later(function()
-  mini('clue')
   local clue = require('mini.clue')
   local clues = clue.gen_clues
   clue.setup({
@@ -345,17 +319,14 @@ later(function()
 end)
 
 later(function()
-  mini('cmdline')
   require('mini.cmdline').setup()
 end)
 
 later(function()
-  mini('cursorword')
   require('mini.cursorword').setup()
 end)
 
 later(function()
-  mini('diff')
   local diff = require('mini.diff')
   diff.setup()
 
@@ -363,7 +334,6 @@ later(function()
 end)
 
 later(function()
-  mini('git')
   local git = require('mini.git')
   git.setup()
 
@@ -371,7 +341,6 @@ later(function()
 end)
 
 later(function()
-  mini('hipatterns')
   local hipatterns = require('mini.hipatterns')
   local words = MiniExtra.gen_highlighter.words
   hipatterns.setup({
@@ -387,27 +356,22 @@ later(function()
 end)
 
 later(function()
-  mini('indentscope')
   require('mini.indentscope').setup({ symbol = '│' })
 end)
 
 later(function()
-  mini('input')
   require('mini.input').setup()
 end)
 
 later(function()
-  mini('jump')
   require('mini.jump').setup()
 end)
 
 later(function()
-  mini('jump2d')
   require('mini.jump2d').setup()
 end)
 
 later(function()
-  mini('map')
   local map = require('mini.map')
   local integration = map.gen_integration
   map.setup({
@@ -431,12 +395,10 @@ later(function()
 end)
 
 later(function()
-  mini('move')
   require('mini.move').setup()
 end)
 
 later(function()
-  mini('operators')
   require('mini.operators').setup({
     evaluate = { prefix = 'go=' },
     exchange = { prefix = 'gox' },
@@ -447,22 +409,18 @@ later(function()
 end)
 
 later(function()
-  mini('pairs')
   require('mini.pairs').setup()
 end)
 
 later(function()
-  mini('splitjoin')
   require('mini.splitjoin').setup()
 end)
 
 later(function()
-  mini('surround')
   require('mini.surround').setup()
 end)
 
 later(function()
-  mini('trailspace')
   local trailspace = require('mini.trailspace')
   trailspace.setup()
 
@@ -471,23 +429,21 @@ later(function()
 end)
 
 later(function()
-  mini('visits')
   require('mini.visits').setup()
 end)
 
 -- [ MISC PLUGINS ]
 
 now(function()
-  gh('ellisonleao/gruvbox.nvim')
-  require('gruvbox').setup({ contrast = 'hard' })
+  gh('folke/tokyonight.nvim')
 
-  vim.cmd.colorscheme('gruvbox')
+  vim.cmd.colorscheme('tokyonight-night')
 end)
 
 args_load(function()
   gh('neovim/nvim-lspconfig')
 
-  vim.lsp.enable({ 'jedi_language_server', 'ruff' })
+  vim.lsp.enable({ 'jedi_language_server', 'lua_ls', 'ruff' })
   autocmd('LspAttach', {
     desc = 'Enable LSP',
     group = augroup('lsp'),
@@ -502,6 +458,49 @@ args_load(function()
 
         vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
       end
+    end,
+  })
+end)
+
+args_load(function()
+  autocmd('PackChanged', {
+    desc = 'Update Nvim Treesitter',
+    group = augroup('nvim-treesitter'),
+    callback = function(ev)
+      if ev.data.spec.name == 'nvim-treesitter' and ev.data.kind == 'update' then
+        if not ev.data.active then
+          vim.cmd.packadd('nvim-treesitter')
+        end
+        vim.cmd.TSUpdate()
+      end
+    end,
+  })
+  gh('nvim-treesitter/nvim-treesitter')
+
+  local langs = { 'bash', 'css', 'json', 'python' }
+  require('nvim-treesitter').install(langs)
+
+  vim.cmd.packadd('nvim-treesitter')
+  local ft = {}
+  for _, lang in ipairs(langs) do
+    vim.list_extend(ft, vim.treesitter.language.get_filetypes(lang))
+  end
+
+  autocmd('FileType', {
+    desc = 'Enable Nvim Treesitter',
+    group = augroup('nvim-treesitter'),
+    pattern = ft,
+    callback = function()
+      -- syntax
+      vim.treesitter.start()
+
+      -- folds
+      vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+      vim.wo.foldmethod = 'expr'
+      vim.wo.foldlevel = 99
+
+      -- indents
+      vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
     end,
   })
 end)

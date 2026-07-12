@@ -144,6 +144,10 @@
       "rev": "01f8e62ea11603e59ad9ff7afcfa94fd183f76d6",
       "src": "https://github.com/nvimtools/none-ls.nvim"
     },
+    "nvim": {
+      "rev": "05e8787020dcfdb937bf2ff23855ea2415b4e072",
+      "src": "https://github.com/catppuccin/nvim"
+    },
     "nvim-lspconfig": {
       "rev": "3371bf298c1f56efc26771ee961f461176958fb5",
       "src": "https://github.com/neovim/nvim-lspconfig"
@@ -155,6 +159,10 @@
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"
+    },
+    "tokyonight.nvim": {
+      "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
+      "src": "https://github.com/folke/tokyonight.nvim"
     }
   }
 }
