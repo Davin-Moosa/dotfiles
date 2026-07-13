@@ -477,7 +477,7 @@ args_load(function()
   })
   gh('nvim-treesitter/nvim-treesitter')
 
-  local langs = { 'bash', 'css', 'json', 'python' }
+  local langs = { 'bash', 'css', 'json', 'lua', 'markdown', 'python' }
   require('nvim-treesitter').install(langs)
 
   vim.cmd.packadd('nvim-treesitter')
