@@ -6,13 +6,15 @@ function fish_greeting
 end
 
 function man
-  /usr/bin/man $argv | bat --style=-numbers --wrap never -l man
+  command man $argv | bat -pl man
 end
 
 fish_vi_key_bindings
 
+alias auth="eval (ssh-agent -c) && ssh-add ~/.ssh/id_github"
 alias ls="eza -A --icons --group-directories-first"
-alias auth="eval '$(ssh-agent -c)'; ssh-add ~/.ssh/id_github"
+alias vi="nvim"
+alias vim="nvim"
 
 set -gx EDITOR nvim
 set -gx VISUAL nvim

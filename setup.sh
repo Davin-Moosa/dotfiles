@@ -1,48 +1,57 @@
 #!/usr/bin/bash
 
+# configure network connection
+nmtui
+
 # install packages
 pkgs=(
   # check for bin versions
-  anki-bin
+  anki
   bat
   blueman
-  brave
+  brave-origin-bin
   brightnessctl
-  btop
-  chafa
   eza
   fd
   fish
   fzf
-  ghostty
+  ghostty-nautilus
   git
   gnome-keyring
   keyd
-  libreoffice-bin
+  lib32-vulkan-radeon
+  libreoffice-fresh
   linux-cachyos
-  neovim-nightly
+  man-db
+  man-pages
+  neovim-nightly-bin
   pavucontrol
-  polkit_gnome
-  proton-vpn
+  polkit-gnome
+  proton-vpn-gtk-app
   qt6ct
   ripgrep
   steam
+  sunsetr
   tealdeer
+  texinfo
   tlp
   tlp-pd
   tlp-rdw
-  fira-code
-  nerd-fonts.symbols-only
+  tree-sitter-cli
+  ttf-fira-code
+  ttf-nerd-fonts-symbols
   uv
   wl-clipboard
-  wlsunset
   xwayland-satellite
   zoxide
 )
+sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+
 sudo pacman -Syu --needed "${pkgs[@]}"
 
-# dark mode
+# set dark theme for gtk4 apps
 dconf write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
+# check /usr/share/themes and /usr/share/local/themes to set dark mode for gtk3 apps
 
 # tldr
 tldr -u
@@ -53,7 +62,7 @@ sudo chsh -s /usr/bin/fish "$(whoami)"
 sudo chfn -f "$(whoami | sed "s/./\u&/")" "$(whoami)"
 
 # kernel
-echo "options amd_pmc enable_stb=1" | sudo tee amd_pmc.conf >/dev/null
+# echo "options amd_pmc enable_stb=1" | sudo tee amd_pmc.conf >/dev/null
 sudo sed -i "s/#default_\(uki\|options\)/default_\1/" /etc/mkinitcpio.d/linux-cachyos.preset
 sudo sed -i "s/default_image/#default_image/" /etc/mkinitcpio.d/linux-cachyos.preset
 sudo mkinitcpio -p linux-cachyos
@@ -65,6 +74,7 @@ sudo tee /etc/keyd/default.conf >/dev/null << "EOF"
 
 [main]
 capslock = overload(control, esc)
+esc = capslock
 EOF
 sudo systemctl enable keyd --now
 
@@ -78,12 +88,24 @@ rm=(htop vim alacritty nano linux)
 sudo pacman -Rns "${rm[@]}"
 
 # symlinks
-ln -sf "$(pwd)/.config/fish" ~/.config
-ln -sf "$(pwd)/.config/fuzzel" ~/.config
-ln -sf "$(pwd)/.config/ghostty" ~/.config
-ln -sf "$(pwd)/.config/mako" ~/.config
-ln -sf "$(pwd)/.config/niri" ~/.config
-ln -sf "$(pwd)/.config/nvim" ~/.config
-ln -sf "$(pwd)/.config/Proton" ~/.config
-ln -sf "$(pwd)/.config/waybar" ~/.config
-ln -sf "$(pwd)/.gitconfig" ~/
+dir="$HOME/dotfiles"
+confs=(
+  "Proton"
+  "fish"
+  "fuzzel"
+  "ghostty"
+  "git"
+  "mako"
+  "niri"
+  "nvim"
+  "qt6ct"
+  "sunsetr"
+  "waybar"
+)
+if [ -d "$dir" ] then
+  for conf in "${confs[@]}"; do
+    ln -sf "$dir/config/$conf" "$HOME/.config/"
+  done
+else
+  echo "No $dir directory"
+fi

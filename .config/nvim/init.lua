@@ -85,11 +85,14 @@ end
 local autocmd = vim.api.nvim_create_autocmd
 
 
-autocmd('TextYankPost', {
+autocmd({ 'TextYankPost', 'TextPutPost'}, {
   desc = 'Highlight when yanking (copying) text',
-  group = augroup('hl-yank'),
+  group = augroup('hl'),
   callback = function()
-    vim.hl.hl_op()
+    vim.hl.hl_op({
+      higroup = 'Visual',
+      timeout = 300,
+    })
   end,
 })
 
@@ -477,14 +480,14 @@ args_load(function()
   })
   gh('nvim-treesitter/nvim-treesitter')
 
-  local langs = { 'bash', 'css', 'json', 'lua', 'markdown', 'python' }
-  require('nvim-treesitter').install(langs)
+  -- local langs = { 'bash', 'css', 'json', 'lua', 'markdown', 'python' }
+  -- require('nvim-treesitter').install(langs)
 
   vim.cmd.packadd('nvim-treesitter')
-  local ft = {}
-  for _, lang in ipairs(langs) do
-    vim.list_extend(ft, vim.treesitter.language.get_filetypes(lang))
-  end
+  local ft = { 'lua' }
+  -- for _, lang in ipairs(langs) do
+  --   vim.list_extend(ft, vim.treesitter.language.get_filetypes(lang))
+  -- end
 
   autocmd('FileType', {
     desc = 'Enable Nvim Treesitter',

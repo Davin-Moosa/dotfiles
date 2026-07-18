@@ -1,5 +1,5 @@
 * {
-    font-family: Roboto, Helvetica, Arial, sans-serif, Nerd Font Symbols;
+    font-family: "Fira Code", Roboto, Helvetica, Arial, sans-serif, "Nerd Font Symbols";
     font-size: 13px;
 }
 
@@ -106,6 +106,7 @@ button:hover {
 
 #backlight {
     background-color: #90b1b1;
+    color: #000000;
 }
 
 #pulseaudio {
@@ -115,7 +116,7 @@ button:hover {
 
 #pulseaudio.muted {
     background-color: #90b1b1;
-    color: #2a5c45;
+    color: #000000;
 }
 
 #tray {
