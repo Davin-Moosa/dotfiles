@@ -3,7 +3,7 @@ local act = wezterm.action
 
 local config = wezterm.config_builder()
 
-wezterm.on("split", function(window, pane)
+wezterm.on('divide', function(window, pane)
   local dims = pane:get_dimensions()
   if dims.pixel_height > dims.pixel_width then
     window:perform_action(act.SplitVertical({ domain = 'CurrentPaneDomain' }), pane)
@@ -22,13 +22,13 @@ config = {
   use_fancy_tab_bar = false,
 
   keys = {
-    { key = 'd', mods = 'ALT', action = act.ShowDebugOverlay },
+    { key = 'D', mods = 'ALT', action = act.ShowDebugOverlay },
 
     { key = 'f', mods = 'ALT', action = act.Search('CurrentSelectionOrEmptyString') },
 
     { key = 'p', mods = 'ALT', action = act.ActivateCommandPalette },
 
-    { key = 's', mods = 'ALT', action = wezterm.action.EmitEvent('split') },
+    { key = 'd', mods = 'ALT', action = wezterm.action.EmitEvent('divide') },
 
     { key = 't', mods = 'ALT', action = act.SpawnTab('CurrentPaneDomain') },
 
@@ -42,19 +42,17 @@ config = {
 
     { key = ']', mods = 'ALT', action = act.ActivateTabRelative(1) },
 
-    { key = 'H', mods = 'ALT',      action = act.AdjustPaneSize({ 'Left', 3 }) },
     { key = 'h', mods = 'ALT|CTRL', action = act.ActivatePaneDirection('Left') },
+    { key = 'H', mods = 'ALT',      action = act.AdjustPaneSize({ 'Left', 3 }) },
 
-    { key = 'J', mods = 'ALT',      action = act.AdjustPaneSize({ 'Down', 3 }) },
     { key = 'j', mods = 'ALT|CTRL', action = act.ActivatePaneDirection('Down') },
+    { key = 'J', mods = 'ALT',      action = act.AdjustPaneSize({ 'Down', 3 }) },
 
-    { key = 'K', mods = 'ALT',      action = act.AdjustPaneSize({ 'Up', 3 }) },
     { key = 'k', mods = 'ALT|CTRL', action = act.ActivatePaneDirection('Up') },
+    { key = 'K', mods = 'ALT',      action = act.AdjustPaneSize({ 'Up', 3 }) },
 
-    { key = 'L', mods = 'ALT',      action = act.AdjustPaneSize({ 'Right', 3 }) },
     { key = 'l', mods = 'ALT|CTRL', action = act.ActivatePaneDirection('Right') },
-
-    { key = 'U', mods = 'CTRL', action = act.CharSelect({ copy_on_select = true, copy_to =  'ClipboardAndPrimarySelection' }) },
+    { key = 'L', mods = 'ALT',      action = act.AdjustPaneSize({ 'Right', 3 }) },
 
     { key = 'C', mods = 'CTRL', action = act.CopyTo('Clipboard') },
     { key = 'V', mods = 'CTRL', action = act.PasteFrom('Clipboard') },
@@ -79,28 +77,18 @@ config = {
       { key = 'Escape', mods = 'NONE', action = act.Multiple({ 'ScrollToBottom', { CopyMode =  'Close' } }) },
       { key = 'Space', mods = 'NONE', action = act.CopyMode({ SetSelectionMode =  'Cell'  }) },
       { key = '$', mods = 'NONE', action = act.CopyMode('MoveToEndOfLineContent') },
-      { key = '$', mods = 'SHIFT', action = act.CopyMode('MoveToEndOfLineContent') },
       { key = ',', mods = 'NONE', action = act.CopyMode('JumpReverse') },
       { key = '0', mods = 'NONE', action = act.CopyMode('MoveToStartOfLine') },
       { key = ';', mods = 'NONE', action = act.CopyMode('JumpAgain') },
       { key = 'F', mods = 'NONE', action = act.CopyMode({ JumpBackward = { prev_char = false } }) },
-      { key = 'F', mods = 'SHIFT', action = act.CopyMode({ JumpBackward = { prev_char = false } }) },
       { key = 'G', mods = 'NONE', action = act.CopyMode('MoveToScrollbackBottom') },
-      { key = 'G', mods = 'SHIFT', action = act.CopyMode('MoveToScrollbackBottom') },
       { key = 'H', mods = 'NONE', action = act.CopyMode('MoveToViewportTop') },
-      { key = 'H', mods = 'SHIFT', action = act.CopyMode('MoveToViewportTop') },
       { key = 'L', mods = 'NONE', action = act.CopyMode('MoveToViewportBottom') },
-      { key = 'L', mods = 'SHIFT', action = act.CopyMode('MoveToViewportBottom') },
       { key = 'M', mods = 'NONE', action = act.CopyMode('MoveToViewportMiddle') },
-      { key = 'M', mods = 'SHIFT', action = act.CopyMode('MoveToViewportMiddle') },
       { key = 'O', mods = 'NONE', action = act.CopyMode('MoveToSelectionOtherEndHoriz') },
-      { key = 'O', mods = 'SHIFT', action = act.CopyMode('MoveToSelectionOtherEndHoriz') },
       { key = 'T', mods = 'NONE', action = act.CopyMode({ JumpBackward = { prev_char = true } }) },
-      { key = 'T', mods = 'SHIFT', action = act.CopyMode({ JumpBackward = { prev_char = true } }) },
       { key = 'V', mods = 'NONE', action = act.CopyMode({ SetSelectionMode =  'Line' }) },
-      { key = 'V', mods = 'SHIFT', action = act.CopyMode({ SetSelectionMode =  'Line' }) },
       { key = '^', mods = 'NONE', action = act.CopyMode('MoveToStartOfLineContent') },
-      { key = '^', mods = 'SHIFT', action = act.CopyMode('MoveToStartOfLineContent') },
       { key = 'b', mods = 'NONE', action = act.CopyMode('MoveBackwardWord') },
       { key = 'b', mods = 'ALT', action = act.CopyMode('MoveBackwardWord') },
       { key = 'b', mods = 'CTRL', action = act.CopyMode('PageUp') },
