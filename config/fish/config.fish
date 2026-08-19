@@ -16,20 +16,25 @@ function echo_dots
 end
 abbr -a dotcd -r '^\.\.+$' -f echo_dots
 
-abbr -a l eza -alh --icons
-abbr -a la eza -alh --icons
-abbr -a ll eza -alh --icons
-abbr -a ls eza -a
+abbr -a l 'eza -alh'
+abbr -a la 'eza -alh'
+abbr -a ll 'eza -alh'
+abbr -a ls 'eza -a'
 
-abbr -a vi nvim
-abbr -a vim nvim
+abbr -a ncg 'sudo nix-collect-garbage -d'
+abbr -a nfu 'sudo nix flake update --flake /etc/nixos'
+abbr -a nrs 'sudo nixos-rebuild switch'
+abbr -a nso 'sudo nix store optimise'
+
+abbr -a pyso 'source (git rev-parse --show-toplevel)/.venv/bin/activate.fish'
+
+abbr -a vi 'nvim'
+abbr -a vim 'nvim'
 
 set -g fish_key_bindings fish_vi_key_bindings
 
 set -gx EDITOR nvim
 set -gx VISUAL nvim
-
-set -gx PROTON_ENABLE_WAYLAND 1
 
 fzf --fish | source
 zoxide init fish | source

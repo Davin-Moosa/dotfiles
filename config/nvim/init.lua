@@ -31,10 +31,10 @@ opt.completeopt = 'menuone,noselect,popup'
 opt.cursorline = true
 
 -- scroll off
-opt.scrolloff = 5
+opt.scrolloff = 10
 
 -- whitespace
-opt.listchars = 'nbsp:␣,tab:› '
+opt.listchars = 'nbsp:␣,tab:» ,trail:⸱,extends:›,precedes:‹'
 opt.list = true
 
 -- confirmation
@@ -294,11 +294,14 @@ later(function()
 end)
 
 later(function()
-  require('mini.animate').setup()
+  require('mini.bracketed').setup()
 end)
 
 later(function()
-  require('mini.bracketed').setup()
+  local bufremove = require('mini.bufremove')
+  bufremove.setup()
+  set_l('bd', bufremove.delete, 'Delete')
+  set_l('bw', bufremove.wipeout, 'Wipeout')
 end)
 
 later(function()
@@ -307,6 +310,7 @@ later(function()
   clue.setup({
     clues = {
       { mode = 'n', keys = '<Leader>D', desc = 'Diagnostics' },
+      { mode = 'n', keys = '<Leader>b', desc = 'MiniBufremove' },
       { mode = 'n', keys = '<Leader>d', desc = 'MiniDiagnostics' },
       { mode = 'n', keys = '<Leader>f', desc = 'MiniFiles' },
       { mode = 'n', keys = '<Leader>M', desc = 'MiniMap' },
