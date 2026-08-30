@@ -562,7 +562,3 @@ args_load(function()
     end,
   })
 end)
-
-safely('filetype:markdown', function()
-  gh('MeanderingProgrammer/render-markdown.nvim')
-end)
