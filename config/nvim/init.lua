@@ -272,6 +272,10 @@ args_load(function()
   set_l('pR', '<Cmd>Pick registers<CR>', 'Registers')
 end)
 
+args_load(function()
+  require('mini.statuscolumn').setup()
+end)
+
 later(function()
   require('mini.extra').setup()
 end)
