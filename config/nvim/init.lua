@@ -1,5 +1,3 @@
--- GLOBALS
-
 -- leader
 vim.g.mapleader = ' '
 
@@ -505,7 +503,7 @@ end)
 args_load(function()
   gh('neovim/nvim-lspconfig')
 
-  vim.lsp.enable({ 'gdscript', 'lua_ls', 'nixd', 'pyrefly' })
+  vim.lsp.enable({ 'gdscript', 'pyrefly', 'ruff', 'rumdl' })
   autocmd('LspAttach', {
     desc = 'Enable LSP',
     group = augroup('lsp'),
@@ -539,7 +537,7 @@ args_load(function()
   })
   gh('nvim-treesitter/nvim-treesitter')
 
-  local langs = { 'bash', 'css', 'json', 'lua', 'nix', 'markdown', 'python' }
+  local langs = { 'gdscript', 'markdown', 'python' }
   require('nvim-treesitter').install(langs)
 
   vim.cmd.packadd('nvim-treesitter')
