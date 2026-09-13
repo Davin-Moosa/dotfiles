@@ -360,7 +360,7 @@ later(function()
       { mode = { 'n', 'x' }, keys = 's' },
     },
     window = {
-      delay = 400,
+      delay = 300,
       config = {
         width = 50,
       },
@@ -406,7 +406,7 @@ later(function()
 end)
 
 later(function()
-  require('mini.indentscope').setup({ symbol = '│' })
+  require('mini.indentscope').setup()
 end)
 
 later(function()
