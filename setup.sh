@@ -10,7 +10,11 @@ confs=(
 )
 if [ -d "$dotdir" ]; then
   for conf in "${confs[@]}"; do
-    ln -s "$dotdir/config/$conf" "$HOME/.config"
+    confpath="$HOME/.config/$conf"
+    if [ -e "$confpath" ]; then
+      mv "$confpath" "$confpath.bak"
+    fi
+    ln -s "$dotdir/config/$conf" "$confpath"
   done
 else
   echo "No $dotdir directory"
