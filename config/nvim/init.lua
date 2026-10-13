@@ -105,9 +105,7 @@ autocmd({ 'TextYankPost', 'TextPutPost'}, {
 
 vim.diagnostic.config({
   severity_sort = true,
-  virtual_text = {
-    current_line = true,
-  },
+  virtual_text = { current_line = true },
 })
 
 -- PLUGINS
@@ -170,9 +168,13 @@ args_load(function()
   local files = require('mini.files')
   files.setup({
     mappings = {
-      go_in = 'gf',
-      go_in_plus = 'L',
-      go_out = 'H',
+      close = '',
+      reveal_cwd = '',
+
+      go_in = '<M-j>',
+      go_in_plus = '<M-l>',
+      go_out = '<M-k>',
+      go_out_plus = '<M-h>',
     },
   })
 
@@ -184,10 +186,10 @@ args_load(function()
       local mark = function(id, path, desc)
         files.set_bookmark(id, path, { desc = desc })
       end
-      mark('C', vim.fn.getcwd, 'Current Working Directory')
-      mark('c', vim.fn.stdpath('config'), 'Config Directory')
-      mark('p', '~/Projects', 'Projects Directory')
-      mark('~', '~', 'Home Directory')
+      mark('c', vim.fn.getcwd, 'Current Working Directory')
+      mark('d', '~/dotfiles', 'Dotfiles')
+      mark('p', '~/Projects', 'Projects')
+      mark('~', '~', 'Home')
     end,
   })
 
@@ -300,10 +302,8 @@ later(function()
 end)
 
 later(function()
-  local bufremove = require('mini.bufremove')
-  bufremove.setup()
-  set_l('bd', bufremove.delete, 'Delete')
-  set_l('bw', bufremove.wipeout, 'Wipeout')
+  set_l('bd', '<Cmd>bdelete<CR>', 'Delete')
+  set_l('bw', '<Cmd>bwipeout<CR>', 'Wipeout')
 end)
 
 later(function()
@@ -311,8 +311,8 @@ later(function()
   local clues = clue.gen_clues
   clue.setup({
     clues = {
+      { mode = 'n', keys = '<Leader>b', desc = 'Buffer' },
       { mode = 'n', keys = '<Leader>D', desc = 'Diagnostics' },
-      { mode = 'n', keys = '<Leader>b', desc = 'MiniBufremove' },
       { mode = 'n', keys = '<Leader>d', desc = 'MiniDiagnostics' },
       { mode = 'n', keys = '<Leader>f', desc = 'MiniFiles' },
       { mode = 'n', keys = '<Leader>M', desc = 'MiniMap' },
@@ -359,9 +359,7 @@ later(function()
     },
     window = {
       delay = 300,
-      config = {
-        width = 50,
-      },
+      config = { width = 50 },
     },
   })
 end)
@@ -551,7 +549,7 @@ args_load(function()
     group = augroup('nvim-treesitter'),
     pattern = ft,
     callback = function()
-      -- syntax
+      -- highlighting
       vim.treesitter.start()
 
       -- folds
@@ -560,7 +558,13 @@ args_load(function()
       vim.wo.foldlevel = 99
 
       -- indents
-      vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      for _, lang in ipairs(langs) do
+        if vim.bo.filetype == lang then
+          if vim.treesitter.query.get(lang, 'indents') then
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end
+      end
     end,
   })
 end)
