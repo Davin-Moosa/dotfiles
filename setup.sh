@@ -19,3 +19,8 @@ if [ -d "$dotdir" ]; then
 else
   echo "No $dotdir directory"
 fi
+
+git clone https://aur.archlinux.org/yay.git "$HOME/.local/aur/yay"
+cd "$HOME/.local/aur/yay"
+makepkg -sri
+yay -S neovim-nightly-bin helium-browser-bin
