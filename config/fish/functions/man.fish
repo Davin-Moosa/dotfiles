@@ -1,3 +1,3 @@
-function cd_dots
-    echo cd (string repeat -n (math (string length -- $argv[1]) - 1) ../)
+function man
+  command man $argv | bat -pl man
 end
