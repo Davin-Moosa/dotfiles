@@ -8,9 +8,8 @@ abbr -a dotcd -r '^\.\.+$' -f cd_dots
 
 abbr -a pyso 'git-auth; source (git rev-parse --show-toplevel)/.venv/bin/activate.fish'
 
-abbr -a l 'eza -lh'
 abbr -a la 'eza -alh'
-abbr -a ll 'eza -alh'
+abbr -a ll 'eza -lh'
 abbr -a ls 'eza -a'
 
 abbr -a vi 'nvim'
