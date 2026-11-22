@@ -22,7 +22,5 @@ set -g fish_key_bindings fish_vi_key_bindings
 set -gx EDITOR nvim
 set -gx VISUAL nvim
 
-set -gx PROTON_ENABLE_WAYLAND 1
-
 fzf --fish | source
 zoxide init fish | source

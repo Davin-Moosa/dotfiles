@@ -1,15 +1,18 @@
--- leader
+-- LEADER
+
 vim.g.mapleader = ' '
 
 -- OPTIONS
 
 local opt = vim.o
 
--- line numbers
+-- status column
 opt.number = true
 opt.relativenumber = true
+opt.signcolumn = 'yes'
 
 -- line wrap
+opt.breakindent = true
 opt.wrap = false
 
 -- indents
@@ -18,29 +21,25 @@ opt.shiftwidth = 2
 opt.smartindent = true
 opt.tabstop = 2
 
--- case sensitivity
+-- search
 opt.ignorecase = true
 opt.smartcase = true
 
--- completion options
+-- editing
 opt.completeopt = 'menuone,noselect,popup'
-
--- cursor line
+opt.confirm = true
 opt.cursorline = true
-
--- scroll off
-opt.scrolloff = 10
+opt.scrolloff = 5
+opt.sidescrolloff = 5
 
 -- whitespace
-opt.listchars = 'nbsp:␣,tab:» ,trail:⸱,extends:›,precedes:‹'
 opt.list = true
+opt.listchars = 'nbsp:␣,tab:» ,trail:⸱,extends:›,precedes:‹'
 
--- confirmation
-opt.confirm = true
-
--- history
-opt.undofile = true
+-- swap file
 opt.history = 20
+opt.undofile = true
+opt.updatetime = 2000
 
 -- splits
 opt.splitbelow = true
@@ -50,17 +49,9 @@ opt.splitright = true
 opt.title = true
 opt.titlestring = 'nvim %{expand("%:~:h")}'
 
--- popup menu
+-- menus
 opt.pumborder = 'bold'
 opt.pumheight = 20
-
--- update time
-opt.updatetime = 2000
-
--- sign column
-opt.signcolumn = 'yes'
-
--- window border
 opt.winborder = 'bold'
 
 -- KEYMAPS
@@ -124,7 +115,6 @@ local later = function(fn)
   safely('later', fn)
 end
 local args_load = vim.fn.argc(-1) > 0 and now or later
-
 
 -- [ MINI MODULES ]
 
@@ -260,7 +250,6 @@ args_load(function()
   set_l('pGfd', '<Cmd>Pick git_files scope="deleted"<CR>', 'Deleted')
   set_l('pGhu', '<Cmd>Pick git_hunks scope="unstaged"<CR>', 'Unstaged')
   set_l('pGhs', '<Cmd>Pick git_hunks scope="staged"<CR>', 'Staged')
-  set_l('ph', '<Cmd>Pick hipatterns<CR>', 'Highlight Patterns')
   set_l('pLc', '<Cmd>Pick list scope="change"<CR>', 'Change')
   set_l('pLj', '<Cmd>Pick list scope="jump"<CR>', 'Jump')
   set_l('pLl', '<Cmd>Pick list scope="location"<CR>', 'Location')
@@ -387,30 +376,11 @@ later(function()
 end)
 
 later(function()
-  local hipatterns = require('mini.hipatterns')
-  local words = MiniExtra.gen_highlighter.words
-  hipatterns.setup({
-    highlighters = {
-      fixme = words({ 'FIXME', 'Fixme', 'fixme' }, 'MiniHipatternsFixme'),
-      hack = words({ 'HACK', 'Hack', 'hack' }, 'MiniHipatternsHack'),
-      todo = words({ 'TODO', 'Todo', 'todo' }, 'MiniHipatternsTodo'),
-      note = words({ 'NOTE', 'Note', 'note' }, 'MiniHipatternsNote'),
-
-      hex_color = hipatterns.gen_highlighter.hex_color(),
-    },
-  })
-end)
-
-later(function()
   require('mini.indentscope').setup()
 end)
 
 later(function()
   require('mini.input').setup()
-end)
-
-later(function()
-  require('mini.jump').setup()
 end)
 
 later(function()
@@ -495,13 +465,19 @@ end)
 now(function()
   gh('folke/tokyonight.nvim')
 
-  vim.cmd.colorscheme('tokyonight')
+  vim.cmd.colorscheme('tokyonight-night')
+end)
+
+args_load(function()
+  gh('mason-org/mason.nvim')
+
+  require('mason').setup()
 end)
 
 args_load(function()
   gh('neovim/nvim-lspconfig')
 
-  vim.lsp.enable({ 'gdscript', 'pyrefly' })
+  vim.lsp.enable({ 'gdscript', 'ty' })
   autocmd('LspAttach', {
     desc = 'Enable LSP',
     group = augroup('lsp'),
@@ -535,7 +511,7 @@ args_load(function()
   })
   gh('nvim-treesitter/nvim-treesitter')
 
-  local langs = { 'gdscript', 'markdown', 'python' }
+  local langs = { 'gdscript', 'markdown', 'python', 'c_sharp' }
   require('nvim-treesitter').install(langs)
 
   vim.cmd.packadd('nvim-treesitter')
@@ -559,9 +535,12 @@ args_load(function()
 
       -- indents
       for _, lang in ipairs(langs) do
-        if vim.bo.filetype == lang then
-          if vim.treesitter.query.get(lang, 'indents') then
+        local filetypes = vim.treesitter.language.get_filetypes(lang)
+
+        for _, filetype in ipairs(filetypes) do
+          if vim.bo.filetype == filetype and vim.treesitter.query.get(lang, "indents") then
             vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            break
           end
         end
       end

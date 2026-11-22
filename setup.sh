@@ -6,7 +6,11 @@ confs=(
   Proton
   fish
   git
+  niri
   nvim
+  waybar
+  xdg-terminals.list
+  zellij
 )
 if [ -d "$dotdir" ]; then
   for conf in "${confs[@]}"; do
@@ -20,7 +24,12 @@ else
   echo "No $dotdir directory"
 fi
 
+tldr -u
+
 git clone https://aur.archlinux.org/yay.git "$HOME/.local/aur/yay"
 cd "$HOME/.local/aur/yay"
 makepkg -sri
-yay -S neovim-nightly-bin helium-browser-bin
+yay -S helium-browser-bin nautilus-open-any-terminal neovim-nightly-bin
+
+gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal custom
+gsettings set com.github.stunkymonkey.nautilus-open-any-terminal custom-local-command zellij
