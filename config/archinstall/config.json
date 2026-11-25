@@ -30,7 +30,7 @@
         "uki": true
     },
     "custom_commands": [
-        "pacman -Rns --noconfirm vim htop chipass",
+        "pacman -Rns --noconfirm vim htop chipass alacritty",
         "chsh -s /usr/bin/fish davin",
         "chfn -f 'Davin' davin"
     ],
