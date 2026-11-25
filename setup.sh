@@ -31,5 +31,6 @@ cd "$HOME/.local/aur/yay"
 makepkg -sri
 yay -S helium-browser-bin nautilus-open-any-terminal neovim-nightly-bin
 
+dconf write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
 gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal custom
 gsettings set com.github.stunkymonkey.nautilus-open-any-terminal custom-local-command zellij
