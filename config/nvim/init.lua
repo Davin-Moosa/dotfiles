@@ -23,6 +23,7 @@ opt.tabstop = 2
 
 -- search
 opt.ignorecase = true
+opt.infercase = true
 opt.smartcase = true
 
 -- editing
@@ -68,10 +69,23 @@ local function set_l(suffix, rhs, opts, mode)
   set('<Leader>' .. suffix, rhs, opts, mode)
 end
 
+set('j', [[v:count == 0 ? 'gj' : 'j']], { expr = true }, { 'n', 'x' })
+set('k', [[v:count == 0 ? 'gk' : 'k']], { expr = true }, { 'n', 'x' })
 
 set('grD', vim.lsp.buf.declaration, 'vim.lsp.buf.declaration()')
 set('grd', vim.lsp.buf.definition, 'vim.lsp.buf.definition()')
 set('grf', vim.lsp.buf.format, 'vim.lsp.buf.format()', { 'n', 'x' })
+
+set('gP', '"+P', 'Paste from system clipboard', { 'x' })
+set('gp', '"+p', 'Paste from system clipboard', { 'x' })
+
+set('gP', '"+P', 'Paste before cursor from system clipboard')
+set('gp', '"+p', 'Paste after cursor from system clipboard')
+
+set('gY', '"+Y', 'Yank to system clipboard', { 'x' })
+set('gy', '"+y', 'Yank to system clipboard', { 'n', 'x' })
+
+set('gY', '"+y$', 'Yank till EOL to system clipboard')
 
 set_l('Dl', vim.diagnostic.setloclist, 'Set diagnostics location list')
 set_l('Dq', vim.diagnostic.setqflist, 'Set diagnostics quickfix list')
@@ -85,7 +99,7 @@ local autocmd = vim.api.nvim_create_autocmd
 
 
 autocmd({ 'TextYankPost', 'TextPutPost'}, {
-  desc = 'Highlight when yanking (copying) text',
+  desc = 'Highlight when yanking text',
   group = augroup('hl'),
   callback = function()
     vim.hl.hl_op({ timeout = 300 })
@@ -440,8 +454,8 @@ later(function()
   local trailspace = require('mini.trailspace')
   trailspace.setup()
 
-  set_l('tT', trailspace.trim, 'Trim')
-  set_l('tt', trailspace.trim_last_lines, 'Trim last lines')
+  set_l('tt', trailspace.trim, 'Trim')
+  set_l('tT', trailspace.trim_last_lines, 'Trim last lines')
 end)
 
 later(function()
@@ -524,7 +538,7 @@ args_load(function()
     desc = 'Enable Nvim Treesitter',
     group = augroup('nvim-treesitter'),
     pattern = ft,
-    callback = function()
+    callback = function(ev)
       -- highlighting
       vim.treesitter.start()
 
@@ -534,15 +548,9 @@ args_load(function()
       vim.wo.foldlevel = 99
 
       -- indents
-      for _, lang in ipairs(langs) do
-        local filetypes = vim.treesitter.language.get_filetypes(lang)
-
-        for _, filetype in ipairs(filetypes) do
-          if vim.bo.filetype == filetype and vim.treesitter.query.get(lang, "indents") then
-            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-            break
-          end
-        end
+      local lang = vim.treesitter.language.get_lang(ev.match)
+      if vim.treesitter.query.get(lang, 'indents') then
+        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
       end
     end,
   })

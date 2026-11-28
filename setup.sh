@@ -1,15 +1,40 @@
 #!/usr/bin/env bash
 
+# packages
+pkgs=(
+  anki
+  bat
+  eza
+  fish
+  fzf
+  godot-mono
+  keyd
+  libreoffice-fresh-en-za
+  proton-vpn-gtk-app
+  ruff
+  neovim-nightly-bin
+  steam
+  tealdeer
+  tree-sitter-cli
+  uv
+  wl-clipboard
+  zellij
+  zoxide
+)
+
+sudo pacman -Syu --needed "${pkgs[@]}"
+
+chsh -s /usr/bin/fish
+sudo pkgfile -u
+tldr -u
+
 # symlinks
 dotdir="$HOME/dotfiles"
 confs=(
   Proton
   fish
   git
-  niri
   nvim
-  waybar
-  xdg-terminals.list
   zellij
 )
 if [ -d "$dotdir" ]; then
@@ -23,14 +48,3 @@ if [ -d "$dotdir" ]; then
 else
   echo "No $dotdir directory"
 fi
-
-tldr -u
-
-git clone https://aur.archlinux.org/yay.git "$HOME/.local/aur/yay"
-cd "$HOME/.local/aur/yay"
-makepkg -sri
-yay -S helium-browser-bin nautilus-open-any-terminal neovim-nightly-bin
-
-dconf write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
-gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal custom
-gsettings set com.github.stunkymonkey.nautilus-open-any-terminal custom-local-command zellij
